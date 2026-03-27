@@ -188,6 +188,19 @@ function renderSubjects() {
 }
 
 function renderSelectedSubject() {
+  // Check if there's a selected subject first
+  if (!state.selectedSubjectId || state.subjects.length === 0) {
+    subjectNameInput.value = "";
+    targetGradeInput.value = "6.00";
+    currentGradeEl.textContent = "0.00";
+    projectedGradeEl.textContent = "0.00";
+    missingGradeEl.textContent = "0.00";
+    goalStatusEl.textContent = "Sin materias";
+    goalStatusEl.className = "status neutral";
+    activityBody.innerHTML = "";
+    return;
+  }
+
   const subject = getSelectedSubject();
   if (!subject) {
     subjectNameInput.value = "";
@@ -230,6 +243,16 @@ function renderSelectedSubject() {
     weightInput.value = activity.weight;
     expectedInput.value = activity.expected || "";
 
+    // Set readonly based on done status
+    const setReadonly = (input, isDone) => {
+      input.readOnly = isDone;
+      input.disabled = isDone;
+    };
+    setReadonly(nameInput, activity.done);
+    setReadonly(scoreInput, activity.done);
+    setReadonly(weightInput, activity.done);
+    setReadonly(expectedInput, activity.done);
+
     const weight = toDecimal(activity.weight);
     const score = toDecimal(activity.score);
     const globalValue = score.mul(weight).div(100);
@@ -261,6 +284,15 @@ function renderSelectedSubject() {
       if (!activity.done && toDecimal(activity.score).equals(0)) {
         activity.score = "0";
       }
+      // Update readonly based on new done status
+      nameInput.readOnly = activity.done;
+      nameInput.disabled = activity.done;
+      scoreInput.readOnly = activity.done;
+      scoreInput.disabled = activity.done;
+      weightInput.readOnly = activity.done;
+      weightInput.disabled = activity.done;
+      expectedInput.readOnly = activity.done;
+      expectedInput.disabled = activity.done;
       persistAndRender();
     });
 

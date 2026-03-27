@@ -226,6 +226,8 @@ textarea {
   transition: var(--transition);
   font-size: 0.9rem;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 input[type="text"]:focus,
@@ -314,18 +316,45 @@ textarea::placeholder {
   overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .app-shell,
+  .layout,
+  .main,
+  .card {
+    overflow: visible !important;
+  }
+  
+  .table-wrap {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 50vh;
+  }
+  
+  table {
+    width: 600px;
+  }
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: auto;
 }
 
 th,
 td {
-  padding: 12px 10px;
+  padding: 14px 12px;
   text-align: left;
   vertical-align: middle;
+}
+
+td:first-child {
+  min-width: 200px;
 }
 
 th {
@@ -336,6 +365,13 @@ th {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+td {
   white-space: nowrap;
 }
 
@@ -362,6 +398,14 @@ td input[type="number"] {
   min-width: 70px;
   padding: 8px 10px;
   font-size: 0.85rem;
+}
+
+td input[readonly],
+td input:disabled {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 td input[data-field="expected"] {
@@ -492,10 +536,13 @@ td input[type="checkbox"] {
 
 .udb-textarea {
   width: 100%;
+  max-width: 100%;
   min-height: 140px;
   resize: vertical;
   font-family: "Space Grotesk", monospace;
   font-size: 0.85rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Delete button */
@@ -563,20 +610,59 @@ td input[type="checkbox"] {
 
 @media (max-width: 768px) {
   body {
-    padding: 16px;
+    padding: 12px;
+  }
+
+  .app-shell {
+    gap: 12px;
+  }
+
+  .warning-banner {
+    font-size: 0.75rem;
+    padding: 10px 12px;
   }
 
   .topbar {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .topbar h1 {
+    font-size: 1.25rem;
   }
   
   .topbar-actions {
     width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  .topbar-actions .btn {
+    flex: 1;
+    justify-content: center;
+    min-width: 100px;
   }
   
   .summary {
     grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  .summary > div {
+    padding: 12px;
+  }
+  
+  .label {
+    font-size: 0.65rem;
+  }
+  
+  .value {
+    font-size: 1.1rem;
+  }
+  
+  .status {
+    font-size: 0.75rem;
+    padding: 2px 8px;
   }
   
   .subject-config {
@@ -592,32 +678,106 @@ td input[type="checkbox"] {
   .table-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
   }
   
   .table-header .btn {
     width: 100%;
     justify-content: center;
   }
+  
+  .table-wrap {
+    margin: 0 -14px;
+    padding: 0 14px;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .table-wrap::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .table-wrap::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  
+  .table-wrap::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
 }
 
 @media (max-width: 480px) {
+  body {
+    padding: 8px;
+  }
+  
+  .card {
+    padding: 14px;
+  }
+  
   .summary {
     grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  
+  .summary > div {
+    padding: 10px;
   }
   
   .value {
-    font-size: 1.2rem;
+    font-size: 1rem;
+  }
+  
+  .sidebar {
+    padding: 14px;
+  }
+  
+  .sidebar-header h2 {
+    font-size: 0.9rem;
   }
   
   th, td {
-    padding: 10px 8px;
-    font-size: 0.8rem;
+    padding: 8px 6px;
+    font-size: 0.7rem;
+  }
+  
+  th {
+    font-size: 0.6rem;
   }
   
   td input[type="text"],
   td input[type="number"] {
-    min-width: 50px;
-    padding: 6px 8px;
+    min-width: 40px;
+    padding: 5px 6px;
+    font-size: 0.75rem;
+  }
+  
+  td input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .delete-activity-btn {
+    padding: 4px 6px;
     font-size: 0.8rem;
+  }
+  
+  .global-cell,
+  .global-expected-cell,
+  .required-cell {
+    font-size: 0.7rem;
+  }
+  
+  .theme-toggle {
+    bottom: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
   }
 }

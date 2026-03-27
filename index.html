@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<!--
+╔══════════════════════════════════════════════════════════════════╗
+║  🧑‍💻 Vibecodeado con MiniMax 2.5 por Gerardo Saz                 ║
+║                                                                  ║
+║  ¿Quieres contribuir? ¡Haz un Pull Request!                    ║
+║  🔗 https://github.com/pgap22/udb-notas-planificador            ║
+║                                                                  ║
+║  ⭐ Si te sirve, dale una estrella al repo                       ║
+╚══════════════════════════════════════════════════════════════════╝
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planificador de Notas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/decimal.js@10.4.3/decimal.min.js"></script>
+</head>
+<body>
+  <button class="theme-toggle" id="theme-toggle" title="Cambiar tema">🌙</button>
+  <div class="app-shell">
+    <header class="topbar card">
+      <div>
+        <p class="eyebrow">Planner académico</p>
+        <h1>Notas con precisión</h1>
+      </div>
+      <div class="topbar-actions">
+        <button id="add-subject-btn" class="btn primary">+ Nueva materia</button>
+        <button id="delete-subject-btn" class="btn ghost danger">Eliminar materia</button>
+      </div>
+    </header>
+
+    <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <p class="eyebrow">Listado</p>
+        <h2>Materias</h2>
+      </div>
+      <ul id="subject-list" class="subject-list"></ul>
+    </aside>
+
+    <main class="main">
+      <section class="subject-config card">
+        <div class="field-group">
+          <label for="subject-name">Detalle módulo</label>
+          <input id="subject-name" type="text" placeholder="Ej: Álgebra Vectorial y Matrices">
+        </div>
+        <div class="field-group small">
+          <label for="target-grade">Nota objetivo</label>
+          <input id="target-grade" type="number" min="0" max="10" step="0.01" value="6">
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="table-header">
+          <h2>Importador UDB</h2>
+          <button id="import-udb-btn" class="btn">Importar</button>
+        </div>
+        <p class="label import-help">Pega el bloque completo con "Detalle módulo", "Nota final" y la tabla.</p>
+        <textarea id="udb-input" class="udb-textarea" placeholder="Pega aquí el contenido del aula virtual..."></textarea>
+      </section>
+
+      <div class="warning-banner">
+        ⚠️ Las notas mostradas NO redondean. El sistema UDB redondea (ej: 5.78 → 5.8). Esta estimación puede ser menor a la real.
+      </div>
+
+      <section class="summary card">
+        <div>
+          <p class="label">Nota actual</p>
+          <p id="current-grade" class="value">0.00</p>
+        </div>
+        <div>
+          <p class="label">Nota final mínima estimada</p>
+          <p id="projected-grade" class="value">0.00</p>
+        </div>
+        <div>
+          <p class="label">Falta para objetivo</p>
+          <p id="missing-grade" class="value">0.00</p>
+        </div>
+        <div>
+          <p class="label">Estado</p>
+          <p id="goal-status" class="status neutral">Sin calcular</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="table-header">
+          <h2>Actividades</h2>
+          <button id="add-activity-btn" class="btn">+ Actividad</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Actividad</th>
+                <th>Hecho</th>
+                <th>Calificación</th>
+                <th>Porcentaje</th>
+                <th>Nota Global</th>
+                <th>Esperado</th>
+                <th>Global Esp.</th>
+                <th>Mínima requerida</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="activity-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <template id="activity-row-template">
+    <tr>
+      <td><input type="text" data-field="name"></td>
+      <td class="center"><input type="checkbox" data-field="done"></td>
+      <td><input type="number" min="0" max="10" step="0.01" data-field="score"></td>
+      <td><input type="number" min="0" max="100" step="0.01" data-field="weight"></td>
+      <td class="global-cell">0.00</td>
+      <td><input type="number" min="0" max="10" step="0.01" data-field="expected" placeholder="Auto"></td>
+      <td class="global-expected-cell">-</td>
+      <td class="required-cell">-</td>
+      <td class="center"><button class="delete-activity-btn" title="Eliminar actividad" aria-label="Eliminar actividad">✕</button></td>
+    </tr>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
